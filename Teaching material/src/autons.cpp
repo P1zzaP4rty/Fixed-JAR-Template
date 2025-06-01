@@ -10,16 +10,14 @@
 
 void default_constants(){
   // Each constant set is in the form of (maxVoltage, kP, kI, kD, startI).
-  chassis.set_drive_constants(10, 1.5, 0, 10, 0); //chassis.set_drive_constants(10, 1.5, 0, 10, 0); 
-  chassis.set_heading_constants(6, .4, 0, 1, 0);  //  chassis.set_heading_constants(6, .4, 0, 1, 0);
-  chassis.set_turn_constants(10, .7,.02, 6, 15); //  chassis.set_turn_constants(12, .4, .03, 3, 15);
-  chassis.set_swing_constants(8, .3, .001, 2, 15); //  chassis.set_swing_constants(12, .3, .001, 2, 15);
-
-//Ku 2.3 Tu 0.5
+  chassis.set_drive_constants(10, 1.5, 0, 10, 0);
+  chassis.set_heading_constants(8, .3, 0, 1, 0);
+  chassis.set_turn_constants(10, .7,.02, 6, 15); //original consitants(12, .4, .03, 3, 15);
+  chassis.set_swing_constants(8, .3, .001, 2, 15);
 
   // Each exit condition set is in the form of (settle_error, settle_time, timeout).
-  chassis.set_drive_exit_conditions(1.5, 300, 5000);
-  chassis.set_turn_exit_conditions(1, 300, 1000);
+  chassis.set_drive_exit_conditions(.5, 100, 3000);
+  chassis.set_turn_exit_conditions(1, 100, 1000);
   chassis.set_swing_exit_conditions(2, 0, 1000);
 }
 
@@ -31,31 +29,41 @@ void default_constants(){
 
 void odom_constants(){
   default_constants();
-  chassis.heading_max_voltage = 8;//og 10
-  chassis.drive_max_voltage = 10;//og 8
-  chassis.drive_settle_error = 1;//og 3
+  chassis.heading_max_voltage = 8;
+  chassis.drive_max_voltage = 10;
+  chassis.drive_settle_error = 1;
   chassis.boomerang_lead = .5;
   chassis.drive_min_voltage = 0;
   chassis.boomerang_setback = 0;
 }
 
-motor_group left_drive = motor_group ();
-motor_group right_drive = motor_group ();
+// motor_group left_drive = motor_group ();
+// motor_group right_drive = motor_group ();
 
-void push (int power, int time){
-left_drive.spin(forward, power, volt);
-right_drive.spin(forward, power, volt);
-task::sleep(time);
-left_drive.spin(forward, 0, volt);
-right_drive.spin(forward, 0, volt);
-}
+// void push (int power, int time){
+// left_drive.spin(forward, power, volt);
+// right_drive.spin(forward, power, volt);
+// task::sleep(time);
+// left_drive.spin(forward, 0, volt);
+// right_drive.spin(forward, 0, volt);
+// }
+
+/*
+ * To initialize data recorder, set "record" to true
+ * before the turn starts.
+ * To terminate data recorder, set "record" to false
+ * after the PID settles.
+ * You must have your controller connected to your computer.
+ * Data will be shown in the Terminal.
+ * 
+ * @param record initializes and terminates data recorder.
+ */
 
 bool record = false;
-int PID_turn_data(){
+int turn_PID_data_recorder(){
   while (true){
   while (record){
-    float heading = chassis.get_absolute_heading();
-    printf("%.1f\n",heading);
+    printf("%.1f\n",custom_print_helper(chassis.get_absolute_heading()));
     task::sleep(5);
   }
   task::sleep(100);
@@ -65,23 +73,35 @@ int PID_turn_data(){
 
 int odom_pos_track(){
   while (!driver_started){
-    Brain.Screen.clearScreen();
+  Brain.Screen.clearScreen();
   Brain.Screen.printAt(5,20, "Auto X: %.1f Y: %.1f Heading: %.1f", chassis.get_X_position(), chassis.get_Y_position(), chassis.get_absolute_heading());
   task::sleep(100);
   }
   return 0;
 }
 
-int collect_data(){
-  while (true){
-      Brain.Screen.printAt(5,40, "%.1f", /* data */);
-      task::sleep(33);
-  }
+void initialize(){
+  odom_constants();
+  turn_PID_data_recorder();
+  task auto1(odom_pos_track);
+}
+
+void collect_turn_PID_data(){
+initialize();
+chassis.set_coordinates(0, 0, 0);
+record = true;
+chassis.turn_to_angle(100);
+record = false;
+}
+
+void general_test()
+{
+
 }
 
 /**
  * The expected behavior is to return to the start position.
- */
+  */
 
 void drive_test(){
   chassis.drive_distance(6);
@@ -89,6 +109,8 @@ void drive_test(){
   chassis.drive_distance(18);
   chassis.drive_distance(-36);
 }
+
+
 
 /**
  * The expected behavior is to return to the start angle, after making a complete turn.

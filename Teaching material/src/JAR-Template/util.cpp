@@ -217,3 +217,18 @@ float clamp_min_voltage(float drive_output, float drive_min_voltage){
   }
   return drive_output;
 }
+
+/**
+ * Corrects the data in the custom print function I made.
+ * Heading of the robot oscilates between 360 and 0.
+ * To fix this QOL issue, this function corrects heading above 359.9 deg to 0 deg.
+ * 
+ * @param heading of the robot from the class cassis.
+ * @return corrected version of the initial heading.
+ */
+float custom_print_helper(float heading){
+ if(heading >= 359.9){
+   heading = 0;
+ }
+ return heading;
+}

@@ -1,4 +1,4 @@
-  #include "vex.h"
+#include "vex.h"
 
 // ---- START VEXCODE CONFIGURED DEVICES ----
 // Robot Configuration:
@@ -42,7 +42,7 @@ Drive chassis(
 //TANK_TWO_ROTATION
 //HOLONOMIC_TWO_ENCODER
 //HOLONOMIC_TWO_ROTATION
-//
+
 //Write it here:
 ZERO_TRACKER_ODOM,
 
@@ -101,7 +101,7 @@ PORT1,
 5.375,
 
 //Input the Sideways Tracker Port, following the same steps as the Forward Tracker Port:
-PORT10,
+PORT11,
 
 //Sideways tracker diameter (reverse to make the direction switch):
 -2,
@@ -111,10 +111,12 @@ PORT10,
 
 );
 
+//Configure the inertial sensor, specify the port number the same way setting up the template.
+inertial Inertial = inertial (PORT1);
+
 int current_auton_selection = 0;
 bool auto_started = false;
 bool driver_started = false;
-inertial Inertial = inertial (PORT1);
 
 void pre_auton() {
   // Initializing Robot Configuration. DO NOT REMOVE!
