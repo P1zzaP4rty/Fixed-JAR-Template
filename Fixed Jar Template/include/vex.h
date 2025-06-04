@@ -25,7 +25,7 @@
 #include "JAR-Template/PID.h"
 #include "autons.h"
 
-#include "..\src\files.h"
+#include "files.h"
 
 #define forever(stuff)                                                          \
   while(1){                                                                     \

@@ -10,14 +10,14 @@
 
 void default_constants(){
   // Each constant set is in the form of (maxVoltage, kP, kI, kD, startI).
-  chassis.set_drive_constants(10, 1.5, 0, 10, 0);
+  chassis.set_drive_constants(10, 1, 0, 10, 0);
   chassis.set_heading_constants(8, .3, 0, 1, 0);
   chassis.set_turn_constants(10, .7,.02, 6, 15); //original consitants(12, .4, .03, 3, 15);
   chassis.set_swing_constants(8, .3, .001, 2, 15);
 
   // Each exit condition set is in the form of (settle_error, settle_time, timeout).
-  chassis.set_drive_exit_conditions(.5, 100, 3000);
-  chassis.set_turn_exit_conditions(1, 100, 1000);
+  chassis.set_drive_exit_conditions(.5, 150, 3000);
+  chassis.set_turn_exit_conditions(1, 150, 1000);
   chassis.set_swing_exit_conditions(2, 0, 1000);
 }
 
@@ -82,7 +82,7 @@ int odom_pos_track(){
 
 void initialize(){
   odom_constants();
-  turn_PID_data_recorder();
+  task auton0(turn_PID_data_recorder);
   task auto1(odom_pos_track);
 }
 
