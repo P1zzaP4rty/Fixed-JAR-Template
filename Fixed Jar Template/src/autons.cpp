@@ -80,14 +80,17 @@ int odom_pos_track(){
   return 0;
 }
 
+/*task runs functions in the background
+ *tasks has to be int functions
+ */
 void initialize(){
   odom_constants();
-  task auton0(turn_PID_data_recorder);
-  task auto1(odom_pos_track);
+  task auto0 (odom_pos_track);
 }
 
 void collect_turn_PID_data(){
 initialize();
+task auto1 (turn_PID_data_recorder);
 chassis.set_coordinates(0, 0, 0);
 record = true;
 chassis.turn_to_angle(100);
@@ -154,6 +157,7 @@ void full_test(){
 
 void odom_test(){
   chassis.set_coordinates(0, 0, 0);
+  // driveType(coast);
   while(1){
     Brain.Screen.clearScreen();
     Brain.Screen.printAt(5,20, "X: %f", chassis.get_X_position());
@@ -168,15 +172,19 @@ void odom_test(){
 /**
  * Should end in the same place it began, but the second movement
  * will be curved while the first is straight.
+ * Records the position of the robot in the terminal
+ * (Make sure controller is connected to computer)
  */
 
 void tank_odom_test(){
   odom_constants();
   chassis.set_coordinates(0, 0, 0);
   chassis.turn_to_point(24, 24);
-  chassis.drive_to_point(24,24);
-  chassis.drive_to_point(0,0);
+  chassis.drive_to_pose(24,24, chassis.get_absolute_heading());
+  printf("%.1f, %.1f, %.1f\n", chassis.get_X_position(), chassis.get_Y_position(), chassis.get_absolute_heading());
+  chassis.drive_to_pose(0,0,0);
   chassis.turn_to_angle(0);
+  printf("%.1f, %.1f, %.1f\n", chassis.get_X_position(), chassis.get_Y_position(), chassis.get_absolute_heading());
 }
 
 /**
