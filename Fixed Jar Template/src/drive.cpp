@@ -1,7 +1,7 @@
-// #include "vex.h"
-// #include "cstdlib"
+#include "vex.h"
+#include "cstdlib"
 
-// using namespace std;
+using namespace std;
 
 // motor_group left_Drive = motor_group(left_front_drive, left_middle_drive, left_rear_drive);
 // motor_group right_Drive = motor_group(right_front_drive, right_middle_drive, right_rear_drive);

@@ -208,7 +208,7 @@ void usercontrol(void) {
 
     Brain.Screen.clearScreen();
     Brain.Screen.printAt(5,20, "Drive Control X: %.1f Y: %.1f Heading: %.1f", chassis.get_X_position(), chassis.get_Y_position(), chassis.get_absolute_heading());
-    // Brain.Screen.printAt(5, 40, "Linear :%.1f", chassis.get_ForwardTracker_position());
+    Brain.Screen.printAt(5, 40, "Linear :%.1f", chassis.get_ForwardTracker_position());
     wait(100, msec); // Sleep the task for a short amount of time to
   }
 }
