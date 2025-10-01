@@ -41,6 +41,9 @@
 #define repeat(iterations)                                                     \
   for (int iterator = 0; iterator < iterations; iterator++)
 
+//Configure the inertial sensor, specify the port number the same way setting up the template.
+inertial Inertial = inertial (PORT1);
+
 // #define driveType(driveType)  /*coast, hold, brake*/                           \
 //   do {                                                                         \
 //     /*Coast let the chassic spin gradually to a stop.       */                 \
